@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -23,6 +24,9 @@ const io = new Server(server, {
 app.use(cors());
 app.use(bodyParser.json());
 
+// Serve the web frontend
+app.use(express.static(path.join(__dirname, '..', 'web')));
+
 // Wire up socket.io emission whenever device state changes
 deviceManager.setStateChangeCallback((deviceId, state) => {
   io.emit('deviceUpdate', { deviceId, state });
@@ -37,6 +41,11 @@ app.use('/api/heating', heatingRouter);
 
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
+
+// Serve index.html for non-API, non-static routes (SPA fallback)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'web', 'index.html'));
+});
 
 // 404 handler
 app.use((req, res) => res.status(404).json({ error: 'Not found' }));
