@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartHome — IoT Control Panel</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <span class="logo-icon">⌂</span>
+        <span class="logo-text">SmartHome</span>
+      </div>
+    </div>
+
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="#" class="nav-link active" data-section="dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link" data-section="xiaomi">
+          <span class="nav-icon">🔌</span>
+          <span class="nav-label">Xiaomi Devices</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link" data-section="midea">
+          <span class="nav-icon">❄️</span>
+          <span class="nav-label">Midea AC</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link" data-section="sonoff">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-label">Sonoff</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link" data-section="heating">
+          <span class="nav-icon">🔥</span>
+          <span class="nav-label">Floor Heating</span>
+        </a>
+      </li>
+      <li class="nav-item nav-item--bottom">
+        <a href="#" class="nav-link" data-section="settings">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-label">Settings</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Hamburger for mobile -->
+  <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- Main layout -->
+  <div class="layout">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="page-title" id="pageTitle">Dashboard</h1>
+      <div class="header-actions">
+        <div class="connection-status" id="connectionStatus">
+          <span class="status-dot status-dot--offline"></span>
+          <span class="status-label" id="statusLabel">Connecting…</span>
+        </div>
+        <button class="btn btn--icon" id="refreshBtn" title="Refresh all devices">↺</button>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="main-content">
+
+      <!-- ── Dashboard ──────────────────────────────── -->
+      <section class="content-section active" id="section-dashboard">
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-icon">📟</div>
+            <div class="summary-info">
+              <div class="summary-value" id="dash-total">—</div>
+              <div class="summary-label">Total Devices</div>
+            </div>
+          </div>
+          <div class="summary-card summary-card--green">
+            <div class="summary-icon">🟢</div>
+            <div class="summary-info">
+              <div class="summary-value" id="dash-online">—</div>
+              <div class="summary-label">Online</div>
+            </div>
+          </div>
+          <div class="summary-card summary-card--blue">
+            <div class="summary-icon">💡</div>
+            <div class="summary-info">
+              <div class="summary-value" id="dash-powered">—</div>
+              <div class="summary-label">Powered On</div>
+            </div>
+          </div>
+          <div class="summary-card summary-card--accent">
+            <div class="summary-icon">⚡</div>
+            <div class="summary-info">
+              <div class="summary-value" id="dash-watts">— W</div>
+              <div class="summary-label">Total Consumption</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="dash-panel">
+            <h2 class="panel-title">🔌 Xiaomi Sockets</h2>
+            <div id="dash-sockets" class="dash-mini-list"></div>
+          </div>
+          <div class="dash-panel">
+            <h2 class="panel-title">❄️ AC Units</h2>
+            <div id="dash-ac" class="dash-mini-list"></div>
+          </div>
+          <div class="dash-panel">
+            <h2 class="panel-title">⚡ Sonoff Meters</h2>
+            <div id="dash-sonoff" class="dash-mini-list"></div>
+          </div>
+          <div class="dash-panel">
+            <h2 class="panel-title">🔥 Floor Heating</h2>
+            <div id="dash-heating" class="dash-mini-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Xiaomi Devices ──────────────────────────── -->
+      <section class="content-section" id="section-xiaomi">
+        <div class="section-header">
+          <h2 class="section-title">Gateway</h2>
+        </div>
+        <div id="gateway-container" class="gateway-container"></div>
+
+        <div class="section-header">
+          <h2 class="section-title">Smart Sockets</h2>
+        </div>
+        <div id="sockets-container" class="device-grid"></div>
+      </section>
+
+      <!-- ── Midea AC ──────────────────────────────── -->
+      <section class="content-section" id="section-midea">
+        <div id="ac-container" class="device-grid device-grid--ac"></div>
+      </section>
+
+      <!-- ── Sonoff ──────────────────────────────── -->
+      <section class="content-section" id="section-sonoff">
+        <div id="sonoff-container" class="device-grid device-grid--sonoff"></div>
+      </section>
+
+      <!-- ── Floor Heating ──────────────────────────── -->
+      <section class="content-section" id="section-heating">
+        <div id="heating-container" class="device-grid device-grid--heating"></div>
+      </section>
+
+      <!-- ── Settings ──────────────────────────────── -->
+      <section class="content-section" id="section-settings">
+        <div class="settings-card card">
+          <h2 class="settings-section-title">Server Connection</h2>
+          <div class="form-group">
+            <label class="form-label" for="serverUrl">Server URL</label>
+            <div class="input-row">
+              <input
+                type="text"
+                id="serverUrl"
+                class="form-input"
+                placeholder="http://localhost:3000"
+                value="http://localhost:3000"
+              />
+              <button class="btn btn--primary" id="connectBtn">Connect</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Connection Status</label>
+            <div class="settings-status" id="settingsStatus">
+              <span class="status-dot status-dot--offline"></span>
+              <span id="settingsStatusText">Disconnected</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Socket.io Transport</label>
+            <div id="settingsTransport" class="settings-value">—</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Socket ID</label>
+            <div id="settingsSocketId" class="settings-value monospace">—</div>
+          </div>
+        </div>
+
+        <div class="settings-card card">
+          <h2 class="settings-section-title">Device Discovery</h2>
+          <p class="settings-description">Scan the local network for new SmartHome devices.</p>
+          <button class="btn btn--primary" id="discoverBtn">🔍 Discover Devices</button>
+          <div id="discoverResults" class="discover-results"></div>
+        </div>
+
+        <div class="settings-card card">
+          <h2 class="settings-section-title">About</h2>
+          <div class="about-info">
+            <div class="about-row"><span>Version</span><span>1.0.0</span></div>
+            <div class="about-row"><span>Server API</span><span>REST + Socket.io</span></div>
+            <div class="about-row"><span>Protocol</span><span>HTTP / WebSocket</span></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Toast notification container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
